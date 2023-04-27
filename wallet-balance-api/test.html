@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <title>Mobile app connection testing</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-12 mb-5">
+          <h4 class="mb-3">Auth0 authorization</h4>
+          <button id="login" type="button" class="btn btn-primary">
+            Login
+          </button>
+          <button
+            id="logout"
+            type="button"
+            class="btn btn-primary"
+            style="display: none"
+          >
+            Logout
+          </button>
+        </div>
+        <div class="col-12 mb-5" id="ws-login-container" style="display: none">
+          <h4 class="mb-3">WS login</h4>
+          <button id="ws-login" type="button" class="btn btn-primary">
+            Login
+          </button>
+        </div>
+        <div class="col-12 mb-5" id="request-container" style="display: none">
+          <h4 class="mb-3">WS requests</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Select request for testing</label>
+            <select class="form-control" name="request">
+              <option value="">Please select</option>
+              <option value="balance-container">Get balance</option>
+              <option value="prepare-tx-container">Prepare unsigned transaction</option>
+              <option value="send-tx-container">Send signed transaction</option>
+              <option value="marketData-container">Get market data</option>
+              <option value="marketChart-container">
+                Get market chart data
+              </option>
+              <option value="txsHistory-container">
+                Get transactions history
+              </option>
+              <option value="txDetails-container">
+                Get transaction details
+              </option>
+              <option value="checkWalletValid-container">
+                Check valid address
+              </option>
+              <option value="getTokenData-container">
+                Get token data
+              </option>
+            </select>
+          </div>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="balance-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Get balance</h4>
+          <textarea name="balanceParams" style="width: 100%; min-height: 250px;">
+[{
+  "blockchains":[
+    {"id":"bitcoin","publicKey":"0352fc6dcf6941d8c0107f814d3d227056bfa0c4a6b034f6822fceb46003f38ba3"},
+    {"id":"bitcoin-testnet","publicKey":"03f806e08bc6b59257fa90d3878835ef72667b5878bd0de6f8f5f327b21aedcd34"},
+    {"id":"binancecoin","publicKey":"0x0275119d10627ac2d72471c09b03ede64a4362afc6e37f8dc77e054b563130c868"},
+    {"id":"ethereum","publicKey":"0x0275119d10627ac2d72471c09b03ede64a4362afc6e37f8dc77e054b563130c868"},
+    {
+      "id":"ethereum-testnet",
+      "publicKey":"0x0275119d10627ac2d72471c09b03ede64a4362afc6e37f8dc77e054b563130c868",
+      "tokens": [
+        {"tokenAddress": "0xc522A53255afd137ee0a32d167F9904998bef93b","type": "erc20","name": "Test","symbol": "TEST","decimals": 18},
+        {"tokenAddress": "0x52B31a9Fa4D1Ad6BDf6AA1EE30a5Dfe8AbD210E8","type": "erc721","name": "TestNFT","symbol": "TNFT","tokenId": 1,"tokenURI":"https://google.com"}
+      ]
+    },
+    {"id":"binance-smart-chain","publicKey":"0x0275119d10627ac2d72471c09b03ede64a4362afc6e37f8dc77e054b563130c868"},
+    {"id":"binance-smart-chain-testnet","publicKey":"0x0275119d10627ac2d72471c09b03ede64a4362afc6e37f8dc77e054b563130c868"},
+    {"id":"litecoin","publicKey":"02486afd8c4df42af65a1dff2da1c2898c127391a11059a34edf7a8bbeb0ec4a7e"},
+    {"id":"bitcoin-cash","publicKey":"0281f4eb7dd4ba77b59b15bc8ad5a71460714589703148969217ca03e8373b352e"},
+    {"id":"ethereum-classic","publicKey":"0x03127b68c0f70d87db928f4c76bdca0a44c6b4a273cc54815c62cda3f7e7eed31e"},
+    {"id":"tron","publicKey":"024ab6bd8e664f756a2ce1d4bbfe24f27b1ea9ba2e15985c9da4a2221f0d30bca8"},
+    {"id":"tron-testnet","publicKey":"024ab6bd8e664f756a2ce1d4bbfe24f27b1ea9ba2e15985c9da4a2221f0d30bca8"},
+    {"id":"cosmos","publicKey":"cosmospub1addwnpepq0dlg5z9kgx97zeesq9pgel33g068936dc3nh9f4n474emme042lqn06e3n"},
+    {"id":"ripple","publicKey":"02208df6df494702f7fec91438bb11ccf4b10f34dedd35f7d1ce03845e493c6da3"},
+    {"id":"matic-network","publicKey":"0x024272fc0f9e6798d1be140205ad09a70a927a3a4f12e3e073e3042eeef4ce6e73"},
+    {"id":"matic-network-testnet","publicKey":"0x024272fc0f9e6798d1be140205ad09a70a927a3a4f12e3e073e3042eeef4ce6e73"},
+    {"id":"dogecoin","publicKey":"029ff6b42e66af2fd0f42d2f1fd442c80607622b6eb7ce18d62eb0153a7028a036"}
+  ],
+  "id":"ce5d2045-f9ad-49b5-8c51-5704958e6e00"
+}]
+          </textarea>
+          <button id="balance" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="prepare-tx-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Prepare unsigned transaction</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="bitcoin">Bitcoin</option>
+              <option value="bitcoin-testnet">Bitcoin testnet</option>
+              <option value="litecoin">Litecoin</option>
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Sender address</label>
+            <input
+              type="text"
+              class="form-control"
+              name="address"
+              placeholder="Sender address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Receiver address</label>
+            <input
+              type="text"
+              class="form-control"
+              name="receiverAddress"
+              placeholder="Receiver address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1"
+            >Value (leave empty for NFT token)</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="value"
+              placeholder="Value (leave empty for NFT token)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1"
+            >Token address (leave empty for a coin)</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="tokenAddress"
+              placeholder="Token address (leave empty for a coin)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Token ID (for NFT tokens only)</label>
+            <input
+              type="text"
+              class="form-control"
+              name="tokenId"
+              placeholder="Token ID (for NFT tokens only)"
+            />
+          </div>
+          <button id="prepare-tx" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="send-tx-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Send transaction</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="bitcoin">Bitcoin</option>
+              <option value="bitcoin-testnet">Bitcoin testnet</option>
+              <option value="litecoin">Litecoin</option>
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Signed transaction</label>
+            <input
+              type="text"
+              class="form-control"
+              name="tx"
+              placeholder="Signed transaction"
+            />
+          </div>
+          <button id="send-tx" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="marketData-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Get market data</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="bitcoin">Bitcoin</option>
+              <option value="bitcoin-testnet">Bitcoin testnet</option>
+              <option value="litecoin">Litecoin</option>
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Currency</label>
+            <select class="form-control" name="currency">
+              <option value="usd">USD</option>
+              <option value="eur">EUR</option>
+            </select>
+          </div>
+          <button id="marketData" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="marketChart-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Get market chart data</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="bitcoin">Bitcoin</option>
+              <option value="bitcoin-testnet">Bitcoin testnet</option>
+              <option value="litecoin">Litecoin</option>
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Currency</label>
+            <select class="form-control" name="currency">
+              <option value="usd">USD</option>
+              <option value="eur">EUR</option>
+            </select>
+          </div>
+          <button id="marketChart" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="checkWalletValid-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Check Valid Address</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="bitcoin">Bitcoin</option>
+              <option value="bitcoin-testnet">Bitcoin testnet</option>
+              <option value="litecoin">Litecoin</option>
+              <option value="bitcoin-cash">bitcoin-cash</option>
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+              <option value="ethereum-classic">Ethereum classic</option>
+              <option value="tron">Tron</option>
+              <option value="tron-testnet">Tron Testnet</option>
+              <option value="matic-network">matic-network</option>
+              <option value="matic-network-testnet">
+                matic-network-testnet
+              </option>
+              <option value="dogecoin">dogecoin</option>
+              <option value="cosmos">Cosmos (atom)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              name="address"
+              placeholder="Address"
+            />
+          </div>
+          <button id="checkWalletValid" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="txsHistory-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Get transactions history</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="bitcoin">Bitcoin</option>
+              <option value="bitcoin-testnet">Bitcoin testnet</option>
+              <option value="litecoin">Litecoin</option>
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              name="address"
+              placeholder="Address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1"
+              >Token address (leave empty for a coin)</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="tokenAddress"
+              placeholder="Token address (leave empty for a coin)"
+            />
+          </div>
+          <button id="txsHistory" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="txDetails-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Get transactions history</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="bitcoin">Bitcoin</option>
+              <option value="bitcoin-testnet">Bitcoin testnet</option>
+              <option value="litecoin">Litecoin</option>
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Transaction ID</label>
+            <input
+              type="text"
+              class="form-control"
+              name="txId"
+              placeholder="Transaction ID"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              name="address"
+              placeholder="Address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1"
+              >Token address (leave empty for a coin)</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="tokenAddress"
+              placeholder="Token address (leave empty for a coin)"
+            />
+          </div>
+          <button id="txDetails" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+        <div
+          class="col-12 mb-5 request-form-container"
+          id="getTokenData-container"
+          style="display: none"
+        >
+          <h4 class="mb-3">Get token data</h4>
+          <div class="form-group">
+            <label class="d-block mb-1">Platform</label>
+            <select class="form-control" name="platform">
+              <option value="ethereum">Ethereum</option>
+              <option value="ethereum-testnet">Ethereum testnet</option>
+              <option value="binance-smart-chain">Binance smart chain</option>
+              <option value="binance-smart-chain-testnet">
+                Binance smart chain testnet
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Token address</label>
+            <input
+              type="text"
+              class="form-control"
+              name="tokenAddress"
+              placeholder="Token address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="d-block mb-1">Token ID (for NFT only)</label>
+            <input
+              type="text"
+              class="form-control"
+              name="tokenId"
+              placeholder="Token ID (for NFT only)"
+            />
+          </div>
+          <button id="getTokenData" type="button" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
+    <script
+      src="https://cdn.socket.io/4.1.2/socket.io.min.js"
+      integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      window.addEventListener('load', function () {
+        let auth0 = null;
+        const connectionOptions = {
+          'force new connection': true,
+          reconnectionAttempts: 'Infinity', //avoid having user reconnect manually in order to prevent dead clients after a server restart
+          timeout: 10000, //before connect_error and connect_timeout are emitted.
+          transports: ['websocket'],
+        };
+        const socket = io('wss://wlt-api.etna.network');
+        let connected = false;
+        let loggedIn = false;
+        let token;
+        socket.on('connect', () => {
+          console.log('ws connected');
+          connected = true;
+        });
+        socket.on('update', (data) => {
+          console.log(data);
+        });
+        socket.on('disconnect', () => {
+          console.log('ws disconnected');
+          connected = false;
+          loggedIn = false;
+          document.querySelector('#ws-login-container').style.display = 'block';
+          document.querySelector('#request-container').style.display = 'none';
+          document.querySelector('#request-container [name=request]').value =
+            '';
+          document
+            .querySelectorAll('.request-form-container')
+            .forEach((item) => {
+              item.style.display = 'none';
+            });
+        });
+
+        /**
+         * Starts the authentication flow
+         */
+        const login = async (targetUrl) => {
+          try {
+            console.log('Logging in', targetUrl);
+
+            const options = {
+              redirect_uri: 'https://wlt-api.etna.network/test',
+            };
+
+            if (targetUrl) {
+              options.appState = { targetUrl };
+            }
+
+            await auth0.loginWithRedirect(options);
+          } catch (err) {
+            console.log('Log in failed', err);
+          }
+        };
+
+        /**
+         * Executes the logout flow
+         */
+        const logout = () => {
+          try {
+            console.log('Logging out');
+            auth0.logout({
+              returnTo: 'https://wlt-api.etna.network/test',
+            });
+          } catch (err) {
+            console.log('Log out failed', err);
+          }
+        };
+
+        /**
+         * Initializes the Auth0 client
+         */
+        const configureClient = async () => {
+          auth0 = await createAuth0Client({
+            domain: 'login-wallet.etna.network',
+            client_id: 'dPyUBDUJiq88YoJzqzlJyexONmCRCRcl',
+            audience: `https://login-wallet.us.auth0.com/api/v2/`,
+          });
+        };
+
+        // Will run when page finishes loading
+        const init = async () => {
+          await configureClient();
+          const isAuthenticated = await auth0.isAuthenticated();
+          console.log(
+            isAuthenticated ? 'Auth0 authenticated' : 'Auth0 not authenticated'
+          );
+          if (isAuthenticated) {
+            window.history.replaceState(
+              {},
+              document.title,
+              'https://wlt-api.etna.network/test'
+            );
+            updateUI();
+            return;
+          }
+
+          const query = window.location.search;
+          const shouldParseResult =
+            query.includes('code=') && query.includes('state=');
+
+          if (shouldParseResult) {
+            try {
+              const result = await auth0.handleRedirectCallback();
+            } catch (err) {
+              console.log('Error parsing redirect:', err);
+            }
+
+            window.history.replaceState({}, document.title, '/test');
+          }
+
+          updateUI();
+        };
+
+        const updateUI = async () => {
+          try {
+            const isAuthenticated = await auth0.isAuthenticated();
+            if (isAuthenticated) {
+              token = await auth0.getTokenSilently();
+              document.querySelector('#login').style.display = 'none';
+              document.querySelector('#logout').style.display = 'inline-block';
+              document.querySelector('#ws-login-container').style.display =
+                'block';
+            }
+          } catch (err) {
+            console.log('Error updating UI!', err);
+          }
+        };
+
+        document.querySelector('#login').addEventListener('click', function () {
+          login();
+        });
+
+        document
+          .querySelector('#logout')
+          .addEventListener('click', function () {
+            logout();
+          });
+
+        document
+          .querySelector('#ws-login')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            socket.emit('login', { token: token }, (result) => {
+              console.log('login', result);
+              if (result.success) {
+                document.querySelector('#ws-login-container').style.display =
+                  'none';
+                document.querySelector('#request-container').style.display =
+                  'block';
+                document.querySelector(
+                  '#request-container [name=request]'
+                ).value = '';
+                loggedIn = true;
+              } else {
+                document.querySelector('#ws-login-container').style.display =
+                  'block';
+                document.querySelector('#request-container').style.display =
+                  'none';
+                document.querySelector(
+                  '#request-container [name=request]'
+                ).value = '';
+                document
+                  .querySelectorAll('.request-form-container')
+                  .forEach((item) => {
+                    item.style.display = 'none';
+                  });
+                loggedIn = false;
+              }
+            });
+          });
+
+        document
+          .querySelector('#request-container [name=request]')
+          .addEventListener('change', function () {
+            const id = this.value;
+            document
+              .querySelectorAll('.request-form-container')
+              .forEach((item) => {
+                item.style.display = 'none';
+              });
+            if (!id) return;
+            const container = document.getElementById(id);
+            if (container) container.style.display = 'block';
+          });
+
+        document
+          .querySelector('#balance')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+
+            const wallets = document.querySelector(
+              '#balance-container [name=balanceParams]'
+            ).value;
+
+            socket.emit(
+              'balance',
+              { wallets: JSON.parse(wallets) },
+              (result) => {
+                console.log('balance', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#getTokenData')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+
+            const platform = document.querySelector(
+              '#getTokenData-container [name=platform]'
+            ).value;
+
+            const tokenAddress = document.querySelector(
+              '#getTokenData-container [name=tokenAddress]'
+            ).value;
+
+            const tokenId = document.querySelector(
+              '#getTokenData-container [name=tokenId]'
+            ).value;
+
+            socket.emit(
+              'getTokenData',
+              { platform, tokenAddress, tokenId },
+              (result) => {
+                console.log('getTokenData', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#prepare-tx')
+          .addEventListener('click', function () {
+            if (!token) {
+              console.log('No Auth0 authorization');
+              return;
+            }
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+            const platform = document.querySelector(
+              '#prepare-tx-container [name=platform]'
+            ).value;
+            const address = document.querySelector(
+              '#prepare-tx-container [name=address]'
+            ).value;
+            const receiverAddress = document.querySelector(
+              '#prepare-tx-container [name=receiverAddress]'
+            ).value;
+            const tokenAddress = document.querySelector(
+              '#prepare-tx-container [name=tokenAddress]'
+            ).value;
+            const value = document.querySelector(
+              '#prepare-tx-container [name=value]'
+            ).value;
+            const tokenId = document.querySelector(
+              '#prepare-tx-container [name=tokenId]'
+            ).value;
+            socket.emit(
+              'prepareTransaction',
+              {
+                token,
+                platform,
+                address,
+                value,
+                receiverAddress,
+                tokenAddress,
+                tokenId,
+              },
+              (result) => {
+                console.log('prepareTransaction', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#send-tx')
+          .addEventListener('click', function () {
+            if (!token) {
+              console.log('No Auth0 authorization');
+              return;
+            }
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+            const platform = document.querySelector(
+              '#send-tx-container [name=platform]'
+            ).value;
+            const tx = JSON.parse(document.querySelector(
+              '#send-tx-container [name=tx]'
+            ).value);
+            socket.emit(
+              'sendTransaction',
+              {
+                token,
+                platform,
+                tx,
+              },
+              (result) => {
+                console.log('sendTransaction', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#marketData')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+            const platform = document.querySelector(
+              '#marketData-container [name=platform]'
+            ).value;
+            const currency = document.querySelector(
+              '#marketData-container [name=currency]'
+            ).value;
+            socket.emit(
+              'marketData',
+              {
+                platform: platform,
+                currency: currency,
+              },
+              (result) => {
+                console.log('marketData', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#marketChart')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+            const platform = document.querySelector(
+              '#marketChart-container [name=platform]'
+            ).value;
+            const currency = document.querySelector(
+              '#marketChart-container [name=currency]'
+            ).value;
+            socket.emit(
+              'marketChart',
+              {
+                platform: platform,
+                currency: currency,
+              },
+              (result) => {
+                console.log('marketChart', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#checkWalletValid')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+            const platform = document.querySelector(
+              '#checkWalletValid-container [name=platform]'
+            ).value;
+            const address = document.querySelector(
+              '#checkWalletValid-container [name=address]'
+            ).value;
+            socket.emit(
+              'checkWalletValid',
+              {
+                platform: platform,
+                address: address,
+              },
+              (result) => {
+                console.log('checkWalletValid', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#txsHistory')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+            const platform = document.querySelector(
+              '#txsHistory-container [name=platform]'
+            ).value;
+            const address = document.querySelector(
+              '#txsHistory-container [name=address]'
+            ).value;
+            const tokenAddress = document.querySelector(
+              '#txsHistory-container [name=tokenAddress]'
+            ).value;
+            socket.emit(
+              'txsHistory',
+              {
+                platform: platform,
+                address: address,
+                tokenAddress: tokenAddress,
+              },
+              (result) => {
+                console.log('txsHistory', result);
+              }
+            );
+          });
+
+        document
+          .querySelector('#txDetails')
+          .addEventListener('click', function () {
+            if (!connected) {
+              console.log('No ws connection');
+              return;
+            }
+            if (!loggedIn) {
+              console.log('Is not logged in');
+              return;
+            }
+            const platform = document.querySelector(
+              '#txDetails-container [name=platform]'
+            ).value;
+            const txId = document.querySelector(
+              '#txDetails-container [name=txId]'
+            ).value;
+            const address = document.querySelector(
+              '#txDetails-container [name=address]'
+            ).value;
+            const tokenAddress = document.querySelector(
+              '#txDetails-container [name=tokenAddress]'
+            ).value;
+            socket.emit(
+              'txDetails',
+              {
+                platform: platform,
+                txId: txId,
+                address: address,
+                tokenAddress: tokenAddress,
+              },
+              (result) => {
+                console.log('txDetails', result);
+              }
+            );
+          });
+
+        init();
+      });
+    </script>
+  </body>
+</html>

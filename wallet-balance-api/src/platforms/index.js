@@ -1,0 +1,14 @@
+exports.bitcoin = require(`${__dirname}/bitcoin.js`);
+exports['bitcoin-testnet'] = require(`${__dirname}/bitcoin.js`);
+exports.litecoin = require(`${__dirname}/bitcoin.js`);
+exports.dogecoin = require(`${__dirname}/bitcoin.js`);
+exports['bitcoin-cash'] = require(`${__dirname}/bitcoin-cash.js`);
+exports['ethereum-classic'] = require(`${__dirname}/ethereum-classic.js`);
+exports.ethereum = require(`${__dirname}/ethereum.js`);
+exports['ethereum-testnet'] = require(`${__dirname}/ethereum.js`);
+exports['matic-network'] = require(`${__dirname}/ethereum.js`);
+exports['matic-network-testnet'] = require(`${__dirname}/ethereum.js`);
+exports['binance-smart-chain'] = require(`${__dirname}/ethereum.js`);
+exports['binance-smart-chain-testnet'] = require(`${__dirname}/ethereum.js`);
+exports.tron = require(`${__dirname}/tron.js`);
+exports['tron-testnet'] = require(`${__dirname}/tron.js`);

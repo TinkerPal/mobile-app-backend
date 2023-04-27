@@ -1,0 +1,40 @@
+{
+  "name": "wallet-balance-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node -r dotenv/config src/app.js",
+    "start:local": "cross-env NODE_ENV=dev & nodemon -r dotenv/config src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "bignumber.js": "^9.0.1",
+    "bip32": "^2.0.6",
+    "bip39": "^3.0.4",
+    "bitcoinjs-lib": "^5.2.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
+    "ethereumjs-util": "^7.1.0",
+    "ethers": "^5.3.1",
+    "express": "^4.17.1",
+    "luxon": "^2.0.1",
+    "mongodb": "^3.6.9",
+    "nodemon": "^2.0.12",
+    "rand-token": "^1.0.1",
+    "socket.io": "^4.1.2",
+    "trezor-address-validator": "^0.3.22",
+    "trongrid": "^1.2.6",
+    "tronweb": "^3.2.7",
+    "ws": "^7.5.2"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.3",
+    "utf-8-validate": "^5.0.5"
+  }
+}

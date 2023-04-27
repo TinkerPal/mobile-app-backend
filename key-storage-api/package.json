@@ -1,0 +1,28 @@
+{
+  "name": "key-storage-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node -r dotenv/config src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "base-x": "^3.0.8",
+    "bech32": "^2.0.0",
+    "bip32-utils": "^0.11.1",
+    "bip39": "^3.0.4",
+    "bitcoinjs-lib": "^5.2.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "create-hash": "^1.2.0",
+    "dotenv": "^10.0.0",
+    "ethereumjs-util": "^7.0.10",
+    "ethers": "^5.4.1",
+    "express": "^4.17.1",
+    "safe-buffer": "^5.2.1"
+  }
+}
